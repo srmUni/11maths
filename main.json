@@ -1,11 +1,11 @@
 [
   {
-   'name': 'sumit',
-   'age':21
+    "name": "sumit",
+    "age": 21
   },
   {
-   'name': 'amit',
-    'age':18
+    "name": "amit",
+    "age": 18
   }
 ]
 
