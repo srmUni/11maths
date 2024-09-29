@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch JSON from GitHub</title>
+    <link rel="stylesheet" href="style.css" />
+    <base href="https://raw.githubusercontent.com/srmUni/11maths/main/" />
+    <script>
+    var base = 'https://raw.githubusercontent.com/srmUni/11maths/main/';
+    var base2 = 'https://raw.githubusercontent.com/srmUni/11maths/refs/heads/main/';
+ </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+</head>
+<body>
+    <h1>View PDFs</h1>
+    <div id="pdf-viewer">
+        <!-- Sticky page indicator inside the pdf-viewer -->
+        <div id="current-page-indicator">Loading...</div>
+    </div>
+    <br>
+    <p id="dlink" >Load Download Link...</p>
+
+    <h1>Data from JSON</h1>
+    <div id="data-container">Load data...</div>
+    
+<script>
+ async function checkFileSize(filePath) {
+        try {
+            const response = await fetch(filePath, { method: 'HEAD' });
+            if (response.ok) {
+                const fileSize = response.headers.get('content-length');
+                if (fileSize) {
+                    const sizeInMB = (fileSize / (1024 * 1024)).toFixed(2);
+                    console.log(`The file size is ${sizeInMB} MB.`);
+                    return sizeInMB;
+                } else {
+                    alert('Unable to determine file size.');
+                }
+            } else {
+                alert('File not found.');
+            }
+        } catch (error) {
+            console.error('Error fetching file:', error);
+            alert('An error occurred while checking the file size.');
+        }
+        return null;
+    }
+
+    async function call(n) {
+        if (hasLoaded) {
+            console.log("PDF already loaded.");
+            return;
+        }
+        hasLoaded = true; // Set the guard variable to true
+
+        const url = `${base}${n}.pdf`;  // PDF URL
+        let pdfDoc = null; // Variable to hold the PDF document
+        let totalPages = 0; // Total number of pages
+        let lastVisiblePage = 1; // Track the last visible page
+        const renderedPages = new Set(); // Set to track rendered pages
+
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        pdfDoc = pdf;
+        totalPages = pdf.numPages; // Get the total number of pages
+        document.getElementById('current-page-indicator').textContent = `Page 1 of ${totalPages}`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            renderPage(i);
+        }
+
+        function renderPage(num) {
+            renderedPages.add(num); // Mark this page as rendered
+
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'pdf-page';
+            document.getElementById('pdf-viewer').appendChild(pageDiv);
+
+            const canvas = document.createElement('canvas');
+            pageDiv.appendChild(canvas);
+
+            pdfDoc.getPage(num).then(function(page) {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
+
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext).promise.then(function() {
+                    // Page rendering complete
+                });
+            });
+        }
+
+        document.getElementById('pdf-viewer').addEventListener('scroll', function() {
+            const pdfViewer = this;
+            const pages = document.querySelectorAll('.pdf-page');
+            const visiblePage = getVisiblePage(pages);
+
+            if (visiblePage !== lastVisiblePage) {
+                lastVisiblePage = visiblePage;
+                document.getElementById('current-page-indicator').textContent = `Page ${visiblePage} of ${totalPages}`;
+            }
+        });
+
+        function getVisiblePage(pages) {
+            let closestPage = 1;
+            let closestDistance = Number.POSITIVE_INFINITY;
+
+            pages.forEach((pageDiv, index) => {
+                const rect = pageDiv.getBoundingClientRect();
+                const distance = Math.abs(rect.top);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestPage = index + 1;
+                }
+            });
+
+            return closestPage;
+        }
+    }
+
+    function updateDownloadLink(n, fileSize) {
+        document.getElementById('dlink').innerHTML = `
+            <button class="dbtn">
+                <a class="dhref" href="${base}${n}.pdf" download>Download the PDF</a>
+            </button>
+            <span>File size: ${fileSize} MB</span>
+        `;
+    }
+
+    let hasLoaded = false;
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    async function fetchDataBasedOnToken(token) {
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.textContent = 'Loading data...';
+
+        try {
+            const response = await fetch(`${base}main.json`);
+            const data = await response.json();
+            if (data[token - 1]) {
+                const item = data[token - 1]; // Get the specific item based on the token
+                const { Chapter: ch, Name: n } = item;
+                dataContainer.textContent = `Chapter: ${ch}, Name: ${n}`;
+                call(n);
+                const fileSize = await checkFileSize(`${base}${n}.pdf`);
+                updateDownloadLink(n, fileSize);
+            } else {
+                dataContainer.textContent = 'No data found for the specified token.';
+            }
+        } catch (error) {
+            console.error('Error fetching JSON:', error);
+            dataContainer.textContent = 'Error loading data.';
+        }
+    }
+
+    function s() {
+        const token = getQueryParam('u'); // Get token from the URL
+        if (!token) {
+            document.write('No token found in the URL.');
+            return;
+        }
+        fetchDataBasedOnToken(token);
+    }
+
+    s(); // Fetch data if a token is already present in the URL on page load
+</script>
+</body>
+</html>

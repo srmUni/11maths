@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>UI-clientAll</title>
+  <script>const base = 'https://raw.githubusercontent.com/srmUni/11maths/main/';</script>
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="table-container"></div>
+
+  <script>
+    function fetchAndPopulateTable() {
+      fetch(`${base}main.json`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data); // Log the data for inspection
+          
+          if (data.length > 0) {
+            // Create the table directly from the data
+            document.getElementById("table-container").appendChild(createTable(data));
+          } else {
+            console.error("No data found in the JSON file.");
+          }
+        })
+        .catch(error => console.error('Error fetching JSON:', error));
+    }
+
+    function createTable(rows) {
+      const table = document.createElement("table");
+      table.className = "tab";
+
+      // Create thead
+      const thead = document.createElement("thead");
+      const headerRow1 = document.createElement("tr");
+      const th = document.createElement("th");
+      th.colSpan = Object.keys(rows[0]).length - 1; // Update to reflect the correct column count minus the hidden column
+      th.textContent = "Maths";
+      headerRow1.appendChild(th);
+      thead.appendChild(headerRow1);
+
+      const headerRow2 = document.createElement("tr");
+      Object.keys(rows[0]).forEach((headerText, index) => {
+        // Skip the header for index 3
+        if (index !== 3) {
+          const th = document.createElement("th");
+          th.textContent = headerText;
+          headerRow2.appendChild(th);
+        }
+      });
+      thead.appendChild(headerRow2);
+      table.appendChild(thead);
+
+      // Create tbody
+      const tbody = document.createElement("tbody");
+
+      rows.forEach(rowData => {
+        const row = document.createElement("tr");
+
+        // Access each property directly
+        Object.keys(rowData).forEach((key, index) => {
+          // Skip the column data at index 3
+          if (index === 3) {
+            return; // Skip this iteration
+          }
+
+          const td = document.createElement("td");
+
+          // If the index is 2, create a link
+          if (index === 2) {
+            const link = document.createElement("a");
+            const linkHref = rowData[key]; // Get the link URL from the current row data
+            const token = rowData.Token; // Assuming you have a Token property in your data
+            link.href = `${linkHref}${token ? `?u=${token}` : ''}`; // Append token if available
+            link.textContent = "LINK"; // Link text
+            link.target = "_self"; // Open in the same tab
+            td.appendChild(link); // Append the link to the cell
+          } else {
+            // For other columns, display the data
+            td.textContent = `${rowData[key]}`;
+          }
+
+          row.appendChild(td);
+        });
+
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(tbody);
+      return table;
+    }
+
+    // Call the function to fetch data and generate the table
+    fetchAndPopulateTable();
+    
+  </script>
+
+</body>
+</html>
