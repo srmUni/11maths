@@ -2,25 +2,25 @@
   {
     "Chapter": 1,
     "Name": "sst",
-    "Link": "gitWeb.html",
-    "Token":"?u=0"
+    "Link": "token.html",
+    "Token": 0
   },
   {
     "Chapter": 2,
     "Name": "engine",
     "Link": "gitWeb.html",
-    "Token":"?u=1"
+    "Token": 1
   },
   {
     "Chapter": 3,
     "Name": "hindi",
     "Link": "gitWeb.html",
-    "Token":"?u=2"
+    "Token": 2
   },
   {
     "Chapter": 4,
     "Name": "maths",
     "Link": "gitWeb.html",
-    "Token":"?u=3"
+    "Token": 4
   }
 ]
