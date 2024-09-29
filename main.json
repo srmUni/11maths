@@ -3,35 +3,35 @@
     "Chapter": 2,
     "Name": "ch2rela&func",
     "Link": "token.html",
-    "Token": 0
+    "Token": 1
   },
   {
     "Chapter": 3,
     "Name": "ch3trigFunc",
     "Link": "token.html",
-    "Token": 1
+    "Token": 2
   },
     {
     "Chapter": 4,
     "Name": "ch4comNum&quadEq",
     "Link": "token.html",
-    "Token": 2
+    "Token": 3
   },  {
     "Chapter": 5,
     "Name": "ch5linEq-ties",
     "Link": "token.html",
-    "Token": 3
+    "Token": 4
   },
   {
     "Chapter": 6,
     "Name": "ch6per&com",
     "Link": "token.html",
-    "Token": 4
+    "Token": 5
   },
   {
     "Chapter": 7,
     "Name": "ch7binoTheo",
     "Link": "token.html",
-    "Token": 5
+    "Token": 6
   }
 ]
