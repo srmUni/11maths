@@ -1,20 +1,22 @@
 [
   {
-    "Chapter":1,
-    "Name":"sst",
-    "Link":"abc"
+    "Chapter": 1,
+    "Name": "sst",
+    "Link": "abc"
   },
-   {
-    "Chapter":2,
-    "Name":"engine",
-    "Link":"abc"
-  },  {
-    "Chapter":3,
-    "Name":"hindi",
-    "Link":"abc"
-  },  {
-    "Chapter":4,
-    "Name":"maths",
-    "Link":"abc"
+  {
+    "Chapter": 2,
+    "Name": "engine",
+    "Link": "abc"
   },
+  {
+    "Chapter": 3,
+    "Name": "hindi",
+    "Link": "abc"
+  },
+  {
+    "Chapter": 4,
+    "Name": "maths",
+    "Link": "abc"
+  }
 ]
