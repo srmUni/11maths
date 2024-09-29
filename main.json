@@ -2,21 +2,21 @@
   {
     "Chapter": 1,
     "Name": "sst",
-    "Link": "abc"
+    "Link": "abc",
   },
   {
     "Chapter": 2,
     "Name": "engine",
-    "Link": "abc"
+    "Link": "abc",
   },
   {
     "Chapter": 3,
     "Name": "hindi",
-    "Link": "abc"
+    "Link": "abc",
   },
   {
     "Chapter": 4,
     "Name": "maths",
-    "Link": "abc"
+    "Link": "abc",
   }
 ]
