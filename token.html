@@ -54,7 +54,7 @@
         }
         hasLoaded = true; // Set the guard variable to true
 
-        const url = `${base}${n}.pdf`;  // PDF URL
+        const url = `${n}.pdf`;  // PDF URL
         let pdfDoc = null; // Variable to hold the PDF document
         let totalPages = 0; // Total number of pages
         let lastVisiblePage = 1; // Track the last visible page
@@ -154,7 +154,7 @@
                 const { Chapter: ch, Name: n } = item;
                 dataContainer.textContent = `Chapter: ${ch}, Name: ${n}`;
                 call(n);
-                const fileSize = await checkFileSize(`${base}${n}.pdf`);
+                const fileSize = await checkFileSize(`${n}.pdf`);
                 updateDownloadLink(n, fileSize);
             } else {
                 dataContainer.textContent = 'No data found for the specified token.';
