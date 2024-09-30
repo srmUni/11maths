@@ -129,7 +129,7 @@
     function updateDownloadLink(n, fileSize) {
         document.getElementById('dlink').innerHTML = `
             <button class="dbtn">
-                <a class="dhref" href="${base}${n}.pdf" download>Download the PDF</a>
+                <a class="dhref" href="${n}.pdf" download>Download the PDF</a>
             </button>
             <span>File size: ${fileSize} MB</span>
         `;
